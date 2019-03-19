@@ -82,68 +82,28 @@ void PlayerSelect() {
   nodelay(stdscr, FALSE);
   clear();
   echo();
-  mvprintw(maxy / 4, maxx / 6, "ENTER P1 NAME: ");
+  attrset(COLOR_PAIR(1));
+  mvprintw(maxy / 4, maxx / 6, "ENTER P1 (RED) NAME: ");
   refresh();
   getnstr(p[0].name, 10);
-  mvprintw(maxy / 4 + 2, maxx / 6, "ENTER P2 NAME: ");
+  attrset(COLOR_PAIR(3));
+  mvprintw(maxy / 4 + 2, maxx / 6, "ENTER P2 (BLUE) NAME: ");
   getnstr(p[1].name, 10);
-
+  colorChoice[1] = 5;
+  colorChoice[2] = 7;
   clear();
   noecho();
 
-  /* Print Color of Player 1 */
-  mvprintw(1, (maxx - strlen(msg1) - strlen(p[0].name)) / 2,
-	   "%s%s", p[0].name, msg1);
-  attrset(COLOR_PAIR(1));
-  mvprintw(2, maxx-12, "RED");
-  //colorChoice
-
-
-  /* Print Color Choice Menu for Player 2 */
-  mvprintw(6, (maxx - strlen(msg1) - strlen(p[1].name)) / 2,
-	   "%s%s", p[1].name, msg1);
-  attrset(COLOR_PAIR(3));
-  mvprintw(6, maxx-12, "BLUE");
-
 }
-
-void DrawPickColor(int y, int colorChoice) {
-  int i;
-  switch(colorChoice) {
-  case 0:
-    mvaddch(y, 6, '*');
-    mvaddch(y, maxx / 2 - 2, ' ');
-    mvaddch(y, maxx - 13, ' ');
-    break;
-  case 1:
-    mvaddch(y, 6, ' ');
-    mvaddch(y, maxx / 2 - 2, '*');
-    mvaddch(y, maxx - 13, ' ');
-    break;
-  case 2:
-    mvaddch(y, 6, ' ');
-    mvaddch(y, maxx / 2 - 2, ' ');
-    mvaddch(y, maxx - 13, '*');
-    break;
-  }
-  attrset(COLOR_PAIR(1));
-  mvprintw(y, 7, "RED");
-  attrset(COLOR_PAIR(2));
-  mvprintw(y, maxx / 2 - 1, "GREEN");
-  attrset(COLOR_PAIR(3));
-  mvprintw(y, maxx - 12, "BLUE");
-  attrset(A_NORMAL);
-}
-
   
 void Quit() {
   clear();
-  char *msg = "EXIT";
+  char *msg = "EXITED";
   mvaddstr(maxy / 2, (maxx - strlen(msg)) / 2, msg);
   DrawTitle(0);
   refresh();
   wrefresh(title);
-  napms(1500);
+  napms(1000);
 }
 
 int Pause() {
