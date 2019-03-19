@@ -1,11 +1,10 @@
 #include "connect4.h"
-FILE *f;
-FILE *saveFile;
+
 Player p[2];
 WINDOW *board, *prompt, *title;
 int maxx, maxy, boardState[8][9], winningPositions[2][7], 
-  colorChoice[3] = {0}, curPointsPlayer[2], turn, colsFull = 0,
-  popOutActive = 0, difTime;
+  colorChoice[3] = {0}, turn, colsFull = 0,
+  popOutActive = 0;
 char menuList[3][20] = {"PvP", "PvC", "EXIT"};
 
 

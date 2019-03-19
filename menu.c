@@ -77,7 +77,7 @@ void DrawMenu(int choice) {
 
 /* Select name and color for both players */
 void PlayerSelect() {
-  char *msg1 = "CHOOSE COLOR, ";
+  char *msg1 = "'s Color is";
   int c, i;
   nodelay(stdscr, FALSE);
   clear();
@@ -91,68 +91,20 @@ void PlayerSelect() {
   clear();
   noecho();
 
-  /* Print Color Choice Menu for Player 1 */
+  /* Print Color of Player 1 */
   mvprintw(1, (maxx - strlen(msg1) - strlen(p[0].name)) / 2,
-	   "%s%s", msg1, p[0].name);
-  DrawPickColor(3, colorChoice[1]);
-  while(1) {
-    c = getch();
-    if(c == ' ' || c == 10)
-      break;
-    if(c == KEY_LEFT) {
-      colorChoice[1] = (colorChoice[1] + 2 ) % 3;
-      DrawPickColor(3, colorChoice[1]);
-    }
-    if(c == KEY_RIGHT) {
-      colorChoice[1] = (colorChoice[1] + 1) % 3;
-      DrawPickColor(3, colorChoice[1]);
-    }
-    refresh();
-  }
+	   "%s%s", p[0].name, msg1);
+  attrset(COLOR_PAIR(1));
+  mvprintw(2, maxx-12, "RED");
+  //colorChoice
+
 
   /* Print Color Choice Menu for Player 2 */
   mvprintw(6, (maxx - strlen(msg1) - strlen(p[1].name)) / 2,
-	   "%s%s", msg1, p[1].name);
-  DrawPickColor(8, colorChoice[2]);
-  while(1) {
-    c = getch();
-    if(c == ' ' || c == 10) {
-      if(colorChoice[2] == colorChoice[1]) {
-        char msg[100];
-        sprintf(msg, "%s are you sure you want to play with the same color as?", p[1].name);
-        mvprintw(14, (maxx - strlen(msg)) / 2, "%s", msg);
-        mvprintw(15, (maxx - strlen("YES(y) / NO(n)")) / 2, "YES(y) / NO(n)");
-        int ch;
-        do {
-          ch = getch();
-        }while(ch != 'y' && ch != 'n');
-        
-        if(ch == 'y')
-          break;
-        else {
-          DrawPickColor(8, colorChoice[2]);
-          mvprintw(14, 0, "                                                                                        ");
-          mvprintw(15, (maxx - strlen("YES(y) / NO(n)")) / 2, "              ");
-        }
-      }
-      else
-	break;
-    }
+	   "%s%s", p[1].name, msg1);
+  attrset(COLOR_PAIR(3));
+  mvprintw(6, maxx-12, "BLUE");
 
-    if(c == KEY_LEFT) {
-      colorChoice[2] = (colorChoice[2] + 2 ) % 3;
-      DrawPickColor(8, colorChoice[2]);
-    }
-    if(c == KEY_RIGHT) {
-      colorChoice[2] = (colorChoice[2] + 1) % 3;
-      DrawPickColor(8, colorChoice[2]);
-    }
-    refresh();
-  }
-
-  /* Increase colorChoice so that would match the COLOR_PAIR */
-  colorChoice[1] += 5;
-  colorChoice[2] += 5;
 }
 
 void DrawPickColor(int y, int colorChoice) {

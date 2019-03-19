@@ -11,7 +11,6 @@ typedef struct {
 }Player;
 
 /* External Variables*/
-extern FILE *f, *saveFile;
 extern Player p[2];
 extern char menuList[3][20], players[2][30], saveFileName[15];
 extern int maxx, maxy, boardState[8][9], colorChoice[3],
@@ -28,8 +27,6 @@ void DrawMenu(int choice);
 void PlayerSelect();
 void DrawPickColor(int y, int colorChoice);
 int Pause();
-void SaveGame();
-void Load();
 void DrawPrompt(char *s);
 void PopOutSelection();
 void DrawTitle(int y);
