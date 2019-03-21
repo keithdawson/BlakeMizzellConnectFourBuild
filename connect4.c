@@ -1,14 +1,11 @@
 #include "connect4.h"
 
 Player p[2];
-WINDOW *board, *prompt, *title;
+WINDOW *board, *prompt, *title, *boardWindow;
 int maxx, maxy, boardState[8][9], winningPositions[2][7], 
-  colorChoice[3] = {0}, turn, colsFull = 0, boardXSize=7, boardYSize=6,
-  popOutActive = 0;
+  colorChoice[3] = {0}, turn, colsFull = 0, boardXDim=7, boardYDim=6;
 char menuList[3][20] = {"PvP", "PvC", "EXIT"};
 
-
-time_t start_time;
 
 int main() {
   int chosen;
@@ -17,9 +14,8 @@ int main() {
   chosen = InitializeMenu();
   switch(chosen) {
   case 0: //Player vs Player
-    start_time = time(NULL);
     PlayerSelect();
-    DrawBoardLayout();
+    DrawBoarder();
     Play();
     break;
   case 1: //Player Vs Computer

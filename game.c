@@ -1,34 +1,32 @@
 #include "connect4.h"
 
-void DrawBoardLayout() {
-  clear();
 
-  int x, y, boardmaxx = 44, boardmaxy = 19;
-  board = newwin(boardmaxy, boardmaxx, 4, 3);
-  wattron(board, COLOR_PAIR(6));
+void DrawBoarder(){
+    clear();
+    int x = 0, y = 0, maxXDim = boardXDim * 6 + 2, maxYDim = boardYDim * 3 + 1;
+    board = newwin(maxYDim, maxXDim, 4, 2);
+    wattron(board, COLOR_PAIR(6));
 
-  for(x = 0; x < boardmaxx; x++) {
-    mvwaddch(board, 0, x, '*');
-    mvwaddch(board, boardmaxy - 1, x, '*');
-  }
 
-  for(y = 0; y < boardmaxy; y++) {
-    mvwaddstr(board, y, 0, "**");
-    mvwaddstr(board, y, boardmaxx - 2, "**");
-  }
-  
-  for(y = 1; y <= boardmaxy - 2; y++)
-    for(x = 0; x < boardmaxx; x += 6)
-      mvwaddstr(board, y, x, "**");
-
-  for(x = 1; x <= boardmaxx - 2; x++)
-    for(y = 0; y < boardmaxy; y += 3)
-      mvwaddch(board, y, x, '*');
-
-  refresh();
-  wrefresh(board);
-
-}
+    for (int i = 0; i < boardXDim; i++){            //This starts in the x direction for each slot
+        for (int j = 0; j < boardYDim; j++){        //This starts in the y direction for each slot
+            for (int k = 0; k < 8; k++) {
+                for (int l = 0; l < 4; l++) {
+                    x = i * 6 + k;
+                    y = j * 3 + l;
+                    if (k % 8 == 0 || k % 8 == 1 || k % 8 == 6 || k % 8 == 7){
+                        mvwaddstr(board, y, x, "#");
+                    }
+                    if (l % 4 == 0 || l % 4 == 3){
+                        mvwaddstr(board, y, x, "#");
+                    }
+                }
+            }
+        }
+    }
+    refresh();
+    wrefresh(board);
+};
 
 void DrawBoard() {
   int i, j, x, y;
@@ -80,18 +78,9 @@ void Play() {
 	break;
       }
       if(ch == 'n') {
-	DrawBoardLayout();
+	DrawBoarder();
 	DrawBoard();
       }
-    }
-    if(c == 'o' && popOutActive == 1 && boardState[6][colChosen + 1] == turn) {
-      if(GetAvailableRow(colChosen + 1) == 0) {
-	colsFull--;
-      }
-      PopOut(colChosen);
-      DrawBoard();
-      turn = 3 - turn;
-      color = colorChoice[turn];
     }
     if(c == ' ' || c == 10) {
       availableRow = GetAvailableRow(colChosen + 1);
@@ -288,7 +277,7 @@ void GameIsDraw() {
   }
   if(ch == 'y') {
     ResetBoard();
-    DrawBoardLayout();
+    DrawBoarder();
     DrawBoard();
   }
 }
@@ -330,7 +319,7 @@ void PopOut(int colChosen) {
 	}
 	if(ch == 'y') {
 	  ResetBoard();
-	  DrawBoardLayout();
+	  DrawBoarder();
 	  DrawBoard();
 	}
       }
@@ -353,7 +342,7 @@ void GameOver() {
   }
   if(ch == 'y') {
     ResetBoard();
-    DrawBoardLayout();
+    DrawBoarder();
     DrawBoard();
   }
 }

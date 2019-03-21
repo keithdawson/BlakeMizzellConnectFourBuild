@@ -13,28 +13,24 @@ typedef struct {
 /* External Variables*/
 extern Player p[2];
 extern char menuList[3][20], players[2][30], saveFileName[15];
-extern int maxx, maxy, boardState[8][9], colorChoice[3],
-  winningPositions[2][7], curPointsPlayer[2], turn, colsFull,
-  popOutActive, difTime;
+int maxx, maxy, boardState[8][9], winningPositions[2][7],
+        colorChoice[3], turn, colsFull, boardXDim, boardYDim;
 extern WINDOW *board, *prompt, *title;
-extern time_t start_time;
+
 
 /* Menu functions */
-void ErrorMessage(char *s);
+
 void Initialize();
 int InitializeMenu();
 void DrawMenu(int choice);
 void PlayerSelect();
-void DrawPickColor(int y, int colorChoice);
-int Pause();
 void DrawPrompt(char *s);
-void PopOutSelection();
 void DrawTitle();
 
 /* Gameplay functions */
-void DrawBoardLayout();
+void DrawBoarder();
 void DrawBoard();
-void PrintTime();
+
 
 void Play();
 void PreviewPiece(int row, int colChosen, int color);
@@ -45,9 +41,8 @@ void InitializeWinningPositions();
 void BlinkWinningPositions();
 void ResetBoard();
 void GameIsDraw();
-void PopOut(int colChosen);
 void GameOver();
-void PopOutSelection();
+
 
 
 void Quit();

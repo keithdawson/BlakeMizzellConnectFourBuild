@@ -23,7 +23,7 @@ int InitializeMenu() {
   char *s = "PRESS ENTER/SPACE TO SELECT OPTION";
   nodelay(stdscr, TRUE);
   DrawMenu(choice);
-  DrawTitle(0);
+  DrawTitle();
   mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
   while(1) {
     refresh();
@@ -84,7 +84,7 @@ void Quit() {
   clear();
   char *msg = "EXITED";
   mvaddstr(maxy / 2, (maxx - strlen(msg)) / 2, msg);
-  DrawTitle(0);
+  DrawTitle();
   refresh();
   wrefresh(title);
   napms(1000);
@@ -99,8 +99,8 @@ void DrawPrompt(char *s) {
   getch();
 }
 
-void DrawTitle(int y) {
-  title = newwin(7, 79, y, 0);
+void DrawTitle() {
+  title = newwin(7, 79, 0, 0);
   wattron(title, COLOR_PAIR(2));
   refresh();
   wclear(title);
