@@ -29,7 +29,7 @@ void DrawPickColor(int y, int colorChoice);
 int Pause();
 void DrawPrompt(char *s);
 void PopOutSelection();
-void DrawTitle(int y);
+void DrawTitle();
 
 /* Gameplay functions */
 void DrawBoardLayout();

@@ -3,7 +3,7 @@
 Player p[2];
 WINDOW *board, *prompt, *title;
 int maxx, maxy, boardState[8][9], winningPositions[2][7], 
-  colorChoice[3] = {0}, turn, colsFull = 0,
+  colorChoice[3] = {0}, turn, colsFull = 0, boardXSize=7, boardYSize=6,
   popOutActive = 0;
 char menuList[3][20] = {"PvP", "PvC", "EXIT"};
 
@@ -18,7 +18,6 @@ int main() {
   switch(chosen) {
   case 0: //Player vs Player
     start_time = time(NULL);
-    PopOutSelection();
     PlayerSelect();
     DrawBoardLayout();
     Play();

@@ -3,7 +3,6 @@
 void DrawBoardLayout() {
   clear();
 
-  int c;
   int x, y, boardmaxx = 44, boardmaxy = 19;
   board = newwin(boardmaxy, boardmaxx, 4, 3);
   wattron(board, COLOR_PAIR(3));
@@ -69,7 +68,6 @@ void Play() {
   nodelay(stdscr, TRUE);
   while(1) {
     c = getch();
-    PrintTime();
     if(c == 'q') {
       int ch;
       DrawPrompt("REALLY QUIT?\n YES(y)/NO(n)");
@@ -93,10 +91,6 @@ void Play() {
       DrawBoard();
       turn = 3 - turn;
       color = colorChoice[turn];
-    }
-    if(c == 'p') {
-      int diff = Pause();
-      start_time += diff;
     }
     if(c == ' ' || c == 10) {
       availableRow = GetAvailableRow(colChosen + 1);
@@ -271,24 +265,6 @@ int GetAvailableRow(int col) {
   while(boardState[i + 1][col] == 0 && i <= 5)
     i++;
   return i;
-}
-/* Prints current time and time spent since the beginning of the game */
-void PrintTime() {
-  struct tm *cur_time;
-  time_t t, dif;
-  t = time(NULL);
-  int hours, minutes, seconds;
-  cur_time = localtime(&t);
-  mvprintw(2, 50, "Local Time:");
-  mvprintw(3, 50, "%02d:%02d:%02d", cur_time -> tm_hour,
-	   cur_time -> tm_min, cur_time -> tm_sec);
-  dif = t - start_time;
-  seconds = dif % 60;
-  dif= dif / 60;
-  minutes = dif% 60;
-  hours = dif / 60;
-  mvprintw(15, 50, "In-game time:");
-  mvprintw(16, 50, "%02d:%02d:%02d", hours, minutes, seconds);
 }
 
 void ResetBoard() {
