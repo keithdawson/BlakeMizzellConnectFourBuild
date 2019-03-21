@@ -27,6 +27,7 @@ void DrawBoardLayout() {
 
   refresh();
   wrefresh(board);
+
 }
 
 void DrawBoard() {
