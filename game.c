@@ -5,7 +5,7 @@ void DrawBoardLayout() {
 
   int x, y, boardmaxx = 44, boardmaxy = 19;
   board = newwin(boardmaxy, boardmaxx, 4, 3);
-  wattron(board, COLOR_PAIR(3));
+  wattron(board, COLOR_PAIR(6));
 
   for(x = 0; x < boardmaxx; x++) {
     mvwaddch(board, 0, x, '*');
@@ -44,7 +44,7 @@ void DrawBoard() {
 	  wattrset(board, COLOR_PAIR(colorChoice[2]));
 	  break;
 	case 3:
-	  wattrset(board, COLOR_PAIR(8));
+	  wattrset(board, COLOR_PAIR(5));
 	  break;
         }
 	mvwaddstr(board, y, x, "****");

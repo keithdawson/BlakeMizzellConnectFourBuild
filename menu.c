@@ -9,14 +9,12 @@ void Initialize() {
   keypad(stdscr, TRUE);
   start_color();
   init_pair(1, COLOR_RED, COLOR_BLACK);
-  init_pair(2, COLOR_GREEN, COLOR_BLACK);
-  init_pair(3, COLOR_BLUE, COLOR_BLACK);
-  init_pair(4, COLOR_MAGENTA, COLOR_MAGENTA);
-  init_pair(5, COLOR_RED, COLOR_RED);
-  init_pair(6, COLOR_GREEN, COLOR_GREEN);
-  init_pair(7, COLOR_BLUE, COLOR_BLUE);
-  init_pair(8, COLOR_WHITE, COLOR_WHITE);
-  init_pair(9, COLOR_CYAN, COLOR_CYAN);
+  init_pair(2, COLOR_BLUE, COLOR_BLACK);
+  init_pair(3, COLOR_RED, COLOR_RED);
+  init_pair(4, COLOR_BLUE, COLOR_BLUE);
+  init_pair(5, COLOR_WHITE, COLOR_WHITE);
+  init_pair(6, COLOR_YELLOW, COLOR_YELLOW);
+
 }
 
 int InitializeMenu() {
@@ -72,11 +70,11 @@ void PlayerSelect() {
   mvprintw(maxy / 4, maxx / 6, "ENTER P1 (RED) NAME: ");
   refresh();
   getnstr(p[0].name, 10);
-  attrset(COLOR_PAIR(3));
+  attrset(COLOR_PAIR(2));
   mvprintw(maxy / 4 + 2, maxx / 6, "ENTER P2 (BLUE) NAME: ");
   getnstr(p[1].name, 10);
-  colorChoice[1] = 5;
-  colorChoice[2] = 7;
+  colorChoice[1] = 3;
+  colorChoice[2] = 4;
   clear();
   noecho();
 
@@ -103,7 +101,7 @@ void DrawPrompt(char *s) {
 
 void DrawTitle(int y) {
   title = newwin(7, 79, y, 0);
-  wattron(title, COLOR_PAIR(3));
+  wattron(title, COLOR_PAIR(2));
   refresh();
   wclear(title);
   mvwprintw(title, 5, (maxx - strlen("Connect Four")) / 2, "Connect Four");
