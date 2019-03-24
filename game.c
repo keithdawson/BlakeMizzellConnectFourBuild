@@ -28,37 +28,29 @@ void DrawBoarder(){
     wrefresh(board);
 };
 
-void DrawBoard() {
-  int i, j, x, y;
-  for(i = 1; i <= 6; i++) {
-    y = 1 + 3 * (i - 1);
-    for(j = 1; j <= 7; j++) {
-      x = 2 + 6 * (j - 1);
-      if(boardState[i][j] != 0) {
-        switch(boardState[i][j]) {
-	case 1:
-	  wattrset(board, COLOR_PAIR(3));
-	  break;
-	case 2:
-	  wattrset(board, COLOR_PAIR(4));
-	  break;
-	case 3:
-	  wattrset(board, COLOR_PAIR(5));
-	  break;
+
+void DrawBoard(){
+    int i, j, x, y;
+    for(i = 1; i <= boardXDim; i++) {
+        x = 2 + 6 * (i - 1);
+        for(j = 1; j <= boardYDim; j++) {
+            y = 1 + 3 * (j - 1);
+            if(boardState[i][j] == 0){
+                wattrset(board, COLOR_PAIR(1));
+                mvwaddstr(board, y, x, "    ");
+                mvwaddstr(board, y + 1, x, "    ");
+            }
+            else{
+                if (boardState[i][j] == 1) wattrset(board, COLOR_PAIR(3));
+                else if (boardState[i][j] == 2) wattrset(board, COLOR_PAIR(4));
+                mvwaddstr(board, y, x, "####");
+                mvwaddstr(board, y + 1, x, "####");
+                wattrset(board, A_NORMAL);
+            }
         }
-	mvwaddstr(board, y, x, "****");
-	mvwaddstr(board, y + 1, x, "****");
-	wattrset(board, A_NORMAL);
-      }
-      else {
-        wattrset(board, COLOR_PAIR(1));
-        mvwaddstr(board, y, x, "    ");
-        mvwaddstr(board, y + 1, x, "    ");
-      }
     }
-  }
-  refresh();
-  wrefresh(board);
+    refresh();
+    wrefresh(board);
 }
 
 void Play() {
@@ -86,7 +78,7 @@ void Play() {
       availableRow = GetAvailableRow(colChosen + 1);
       if(availableRow > 0) {
 	AnimatePiece(turn, colChosen);
-	boardState[availableRow][colChosen + 1] = turn;
+	boardState[colChosen + 1][availableRow] = turn;
 	DrawBoard(boardState);
 	if(CheckEndOfGameFromPosition(availableRow, colChosen + 1)) {
 	  GameOver();
@@ -113,11 +105,18 @@ void Play() {
     }
   }
 }
+
+void Play1(){
+    int rowAvailable, columnChosen = 0, color = 3;
+    turn = 1;
+    nodelay(stdscr, TRUE);
+}
+
 int CheckEndOfGameFromPosition(int row, int col) {
   int ok = 0, count = 0, i = row, j = col;
   InitializeWinningPositions();
   /* check vertical */
-  while(boardState[i][j] == boardState[row][col] && i <= 6) {
+  while(boardState[i][j] == boardState[col][row] && i <= 6) {
     count++;
     winningPositions[0][count - 1] = i;
     winningPositions[1][count - 1] = j;
@@ -129,14 +128,14 @@ int CheckEndOfGameFromPosition(int row, int col) {
   /* check horizontal */
   count = 0; i = row; j = col;
   InitializeWinningPositions();
-  while(boardState[i][j] == boardState[row][col] && j >= 1) {
+  while(boardState[i][j] == boardState[col][row] && j >= 1) {
     count++;
     winningPositions[0][count - 1] = i;
     winningPositions[1][count - 1] = j;
     j--;
   }
   j = col + 1;
-  while(boardState[i][j] == boardState[row][col] && j <= 7) {
+  while(boardState[i][j] == boardState[col][row] && j <= 7) {
     count++;
     winningPositions[0][count - 1] = i;
     winningPositions[1][count - 1] = j;
@@ -148,7 +147,7 @@ int CheckEndOfGameFromPosition(int row, int col) {
   /* check first diagonal */
   count = 0; i = row; j = col;
   InitializeWinningPositions();
-  while(boardState[i][j] == boardState[row][col] && j <=7 && i >= 1) {
+  while(boardState[i][j] == boardState[col][row] && j <=7 && i >= 1) {
     count++;
     winningPositions[0][count - 1] = i;
     winningPositions[1][count - 1] = j;
@@ -157,7 +156,7 @@ int CheckEndOfGameFromPosition(int row, int col) {
   }
   i = row + 1;
   j = col - 1;
-  while(boardState[i][j] == boardState[row][col] && j >=1 && i <= 6) {
+  while(boardState[i][j] == boardState[col][row] && j >=1 && i <= 6) {
     count++;
     winningPositions[0][count - 1] = i;
     winningPositions[1][count - 1] = j;
@@ -170,7 +169,7 @@ int CheckEndOfGameFromPosition(int row, int col) {
   /* check second diagonal */
   count = 0; i = row; j = col;
   InitializeWinningPositions();
-  while(boardState[i][j] == boardState[row][col] && j >=1 && i >= 1) {
+  while(boardState[i][j] == boardState[col][row] && j >=1 && i >= 1) {
     count++;
     winningPositions[0][count - 1] = i;
     winningPositions[1][count - 1] = j;
@@ -179,7 +178,7 @@ int CheckEndOfGameFromPosition(int row, int col) {
   }
   i = row + 1;
   j = col + 1;
-  while(boardState[i][j] == boardState[row][col] && j <= 7 && i <= 6) {
+  while(boardState[i][j] == boardState[col][row] && j <= 7 && i <= 6) {
     count++;
     winningPositions[0][count - 1] = i;
     winningPositions[1][count - 1] = j;
@@ -221,12 +220,12 @@ void BlinkWinningPositions() {
 void AnimatePiece(int turn, int colChosen) {
   int i = 1, availableRow = GetAvailableRow(colChosen + 1);
   while(i < availableRow) {
-    boardState[i][colChosen + 1] = turn;
+    boardState[colChosen + 1][i] = turn;
     DrawBoard(boardState);
     refresh();
     wrefresh(board);
     napms(120);
-    boardState[i][colChosen + 1] = 0;
+    boardState[colChosen + 1][i] = 0;
     DrawBoard(boardState);
     refresh();
     i++;
@@ -252,15 +251,15 @@ void PreviewPiece(int row, int colChosen, int color) {
 
 int GetAvailableRow(int col) {
   int i = 0;
-  while(boardState[i + 1][col] == 0 && i <= 5)
+  while(boardState[col][i + 1] == 0 && i <= 5)
     i++;
   return i;
 }
 
 void ResetBoard() {
   int i, j;
-  for(i = 0; i < 8; i++)
-    for(j = 0; j < 9; j++)
+  for(i = 0; i < boardXDim; i++)
+    for(j = 0; j < boardYDim; j++)
       boardState[i][j] = 0;
 }
 void GameIsDraw() {
@@ -280,50 +279,6 @@ void GameIsDraw() {
     DrawBoarder();
     DrawBoard();
   }
-}
-void PopOut(int colChosen) {
-  int i, winningCombinations[2] = {0};
-  for(i = 6; i >= 1; i--) {
-    if(boardState[i][colChosen + 1] != 0) {
-      boardState[i][colChosen + 1] = 0;
-      DrawBoard();
-      napms(180);
-      boardState[i][colChosen + 1] = boardState[i - 1][colChosen + 1];
-    }
-  }
-  for(i = 6; i >= 1; i--) {
-    if(boardState[i][colChosen + 1] != 0) {
-      if(CheckEndOfGameFromPosition(i, colChosen + 1)) {
-	BlinkWinningPositions();
-	winningCombinations[boardState[i][colChosen + 1] - 1]++;
-      }
-    }
-  }
-  if(winningCombinations[0] > 0 && winningCombinations[1] > 0) {
-    GameIsDraw();
-  }
-  else
-    for(i = 0; i < 2; i++) {
-      if(winningCombinations[i] > 0) {
-	char msg[100];
-	int ch;
-	colsFull = 0;
-	sprintf(msg, "%s WINS!\n PLAY AGAIN?\n YES(y)/NO(n)",
-		p[i].name);
-	DrawPrompt(msg);
-	while((ch = getch()) != 'y' && ch != 'n');
-	if(ch == 'n') {
-	  Quit();
-	  endwin();
-	  exit(0);
-	}
-	if(ch == 'y') {
-	  ResetBoard();
-	  DrawBoarder();
-	  DrawBoard();
-	}
-      }
-    }
 }
 /* Update variables and print message when the game is over */
 void GameOver() {
