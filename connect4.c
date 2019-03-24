@@ -2,8 +2,7 @@
 
 Player p[2];
 WINDOW *board, *prompt, *title, *boardWindow;
-int maxx, maxy, boardState[8][9], winningPositions[2][7], 
-  colorChoice[3] = {0}, turn, colsFull = 0, boardXDim=7, boardYDim=6;
+int maxx, maxy, boardState[8][9], winningPositions[2][7], turn, colsFull = 0, boardXDim=7, boardYDim=6;
 char menuList[3][20] = {"PvP", "PvC", "EXIT"};
 
 

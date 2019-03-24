@@ -37,10 +37,10 @@ void DrawBoard() {
       if(boardState[i][j] != 0) {
         switch(boardState[i][j]) {
 	case 1:
-	  wattrset(board, COLOR_PAIR(colorChoice[1]));
+	  wattrset(board, COLOR_PAIR(3));
 	  break;
 	case 2:
-	  wattrset(board, COLOR_PAIR(colorChoice[2]));
+	  wattrset(board, COLOR_PAIR(4));
 	  break;
 	case 3:
 	  wattrset(board, COLOR_PAIR(5));
@@ -62,7 +62,7 @@ void DrawBoard() {
 }
 
 void Play() {
-  int c, availableRow, colChosen = 0, color = colorChoice[1];
+  int c, availableRow, colChosen = 0, color = 3;
   turn = 1;
   nodelay(stdscr, TRUE);
   while(1) {
@@ -92,7 +92,7 @@ void Play() {
 	  GameOver();
 	}
 	turn = 3 - turn;
-	color = colorChoice[turn];
+	color = (turn / 2) + 3;
 	if(availableRow == 1) {
 	  colsFull++;
 	  if(colsFull == 7) {

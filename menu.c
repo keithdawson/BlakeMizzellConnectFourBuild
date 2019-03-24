@@ -73,8 +73,6 @@ void PlayerSelect() {
   attrset(COLOR_PAIR(2));
   mvprintw(maxy / 4 + 2, maxx / 6, "ENTER P2 (BLUE) NAME: ");
   getnstr(p[1].name, 10);
-  colorChoice[1] = 3;
-  colorChoice[2] = 4;
   clear();
   noecho();
 

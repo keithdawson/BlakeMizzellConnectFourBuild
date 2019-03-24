@@ -13,8 +13,7 @@ typedef struct {
 /* External Variables*/
 extern Player p[2];
 extern char menuList[3][20], players[2][30], saveFileName[15];
-int maxx, maxy, boardState[8][9], winningPositions[2][7],
-        colorChoice[3], turn, colsFull, boardXDim, boardYDim;
+int maxx, maxy, boardState[8][9], winningPositions[2][7], turn, colsFull, boardXDim, boardYDim;
 extern WINDOW *board, *prompt, *title;
 
 
