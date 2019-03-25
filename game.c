@@ -64,10 +64,17 @@ void Play(){
     mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
     do {
         input = getch();
-        if (input == ' ' || input == 10) {                                    //Check this area
+        if (input == ' ' || input == 10) {
             rowAvailable = GetAvailableRow(columnChosen);
             if (rowAvailable > 0) {
-                DropPiece(turn, columnChosen);
+                //New/cleaned
+                for (int i = 0 ; i < GetAvailableRow(columnChosen) ; i++ ){
+                    boardState[i][columnChosen + 1] = turn;
+                    DrawBoard();
+                    napms(120);
+                    boardState[i][columnChosen + 1] = 0;
+                    DrawBoard();
+                }
                 boardState[rowAvailable][columnChosen+1] = turn;
                 DrawBoard(boardState);
                 if (!1/*CheckEndOfGameFromPosition(rowAvailable, columnChosen)*/) {
@@ -77,7 +84,7 @@ void Play(){
                 else turn = 1;
                 if (rowAvailable == 1) {
                     colsFull++;
-                    if (colsFull == 7) {
+                    if (colsFull == boardXDim) {
                         colsFull = 0;
                         GameIsDraw();
                     }
@@ -99,7 +106,7 @@ void Play(){
     Quit();
 }
 
-//Check End Of game (totally rewrite
+//Check End Of game (totally rewrite)
 /*
 int CheckEndOfGameFromPosition(int row, int col) {
     col = col+1;
@@ -191,22 +198,10 @@ int CheckEndOfGameFromPosition(int row, int col) {
 */
 
 
-
-//Implement into play No need to be own function
-void DropPiece(int turn, int columnChosen) {
-    for (int i = 0 ; i < GetAvailableRow(columnChosen) ; i++ ){
-        boardState[i][columnChosen + 1] = turn;
-        DrawBoard();
-        napms(120);
-        boardState[i][columnChosen + 1] = 0;
-        DrawBoard();
-    }
-}
-
-void PreviewPiece(int row, int colChosen, int color) {
+void PreviewPiece(int row, int columnChosen, int color) {
   int i;
-  for(i = 0; i < 7; i++) {
-    if(i == colChosen) {
+  for(i = 0; i < boardXDim; i++) {
+    if(i == columnChosen) {
       attron(COLOR_PAIR(color));
       mvprintw(row, 4 + 6 * i, "****");
       mvprintw(row + 1, 4 + 6 * i, "****");
@@ -233,6 +228,7 @@ void ResetBoard() {
     for(j = 0; j <= boardXDim; j++)
       boardState[i][j] = 0;
 }
+
 void GameIsDraw() {
   char *msg = "DRAW!\n PLAY AGAIN?\n YES(y) / NO(n)";
   int ch;
@@ -256,9 +252,10 @@ void GameOver() {
   char msg[100];
   int ch;
   colsFull = 0;
+
+  //Error Cheching help
   sprintf(msg, "%s WINS!\n PLAY AGAIN OR EXIT?\n YES(y)/NO(n)",
 	  p[turn - 1].name);
-  //BlinkWinningPositions();
   DrawPrompt(msg);
   while((ch = getch()) != 'y' && ch != 'n');
   if(ch == 'n') {

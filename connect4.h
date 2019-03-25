@@ -32,7 +32,6 @@ void DrawBoard();
 void Play();
 void PreviewPiece(int row, int colChosen, int color);
 int GetAvailableRow(int col);
-void DropPiece(int turn, int columnChosen);
 int CheckEndOfGameFromPosition(int row, int col);
 void ResetBoard();
 void GameIsDraw();
