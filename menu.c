@@ -23,7 +23,12 @@ int InitializeMenu() {
   char *s = "PRESS ENTER/SPACE TO SELECT OPTION";
   nodelay(stdscr, TRUE);
   DrawMenu(choice);
-  DrawTitle();
+  title = newwin(7, maxx, 0, 0);
+  wattron(title, COLOR_PAIR(2));
+  refresh();
+  wclear(title);
+  mvwprintw(title, 5, (maxx - strlen("Connect Four")) / 2, "Connect Four");
+  wattroff(title, COLOR_PAIR(10));
   mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
   while(1) {
     refresh();
@@ -82,7 +87,12 @@ void Quit() {
   clear();
   char *msg = "EXITED";
   mvaddstr(maxy / 2, (maxx - strlen(msg)) / 2, msg);
-  DrawTitle();
+  title = newwin(7, maxx, 0, 0);
+  wattron(title, COLOR_PAIR(2));
+  refresh();
+  wclear(title);
+  mvwprintw(title, 5, (maxx - strlen("Connect Four")) / 2, "Connect Four");
+  wattroff(title, COLOR_PAIR(10));
   refresh();
   wrefresh(title);
   napms(1000);
@@ -95,13 +105,4 @@ void DrawPrompt(char *s) {
   touchwin(prompt);
   wrefresh(prompt);
   getch();
-}
-
-void DrawTitle() {
-  title = newwin(7, 79, 0, 0);
-  wattron(title, COLOR_PAIR(2));
-  refresh();
-  wclear(title);
-  mvwprintw(title, 5, (maxx - strlen("Connect Four")) / 2, "Connect Four");
-  wattroff(title, COLOR_PAIR(10));
 }

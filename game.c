@@ -53,26 +53,15 @@ void DrawBoard(){
     wrefresh(board);
 }
 
-void Play() {
+/*void Play() {
   int c, availableRow, colChosen = 0, color = 3;
   turn = 1;
   nodelay(stdscr, TRUE);
   while(1) {
     c = getch();
     if(c == 'q') {
-      int ch;
-      DrawPrompt("REALLY QUIT?\n YES(y)/NO(n)");
-      do {
-	ch = getch();
-      }while(ch != 'y' && ch != 'n');
-      if(ch == 'y') {
-	Quit();
-	break;
-      }
-      if(ch == 'n') {
-	DrawBoarder();
-	DrawBoard();
-      }
+      Quit();
+      break;
     }
     if(c == ' ' || c == 10) {
       availableRow = GetAvailableRow(colChosen + 1);
@@ -95,22 +84,59 @@ void Play() {
       }
     }
     PreviewPiece(2, colChosen, color);
-    if(c == KEY_LEFT || c == 'a') {
+    if(c == KEY_LEFT) {
       colChosen = (colChosen + 6) % 7;
       PreviewPiece(2, colChosen, color);
     }
-    if(c == KEY_RIGHT || c == 'd') {
+    if(c == KEY_RIGHT) {
       colChosen = (colChosen + 1) % 7;
       PreviewPiece(2, colChosen, color);
     }
   }
-}
+}*/
 
-void Play1(){
-    int rowAvailable, columnChosen = 0, color = 3;
+void Play(){
+    int input, rowAvailable, columnChosen = 0;
     turn = 1;
     nodelay(stdscr, TRUE);
+    char *s = "Use arrow keys to pick column, enter to select and 'q' to quit.";
+    mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
+    do {
+        input = getch();
+        if (input == ' ' || input == 10) {                                    //Check this area
+            rowAvailable = GetAvailableRow(columnChosen);
+            if (rowAvailable > 0) {
+                AnimatePiece(turn, columnChosen);
+                boardState[columnChosen][rowAvailable] = turn;
+                DrawBoard(boardState);
+                if (CheckEndOfGameFromPosition(rowAvailable, columnChosen)) {
+                    GameOver();
+                }
+                if (turn == 1) turn = 2;
+                else turn = 1;
+                if (rowAvailable == 1) {
+                    colsFull++;
+                    if (colsFull == 7) {
+                        colsFull = 0;
+                        GameIsDraw();
+                    }
+                }
+            }
+        }
+        PreviewPiece(2, columnChosen, turn + 2);
+        if (input == KEY_LEFT) {
+            columnChosen = (columnChosen + 6) % 7;
+            PreviewPiece(2, columnChosen, turn + 2);
+        }
+        if (input == KEY_RIGHT) {
+            columnChosen = (columnChosen + 1) % 7;
+            PreviewPiece(2, columnChosen, turn + 2);
+        }
+    }
+    while (input != 'q');
+    Quit();
 }
+
 
 int CheckEndOfGameFromPosition(int row, int col) {
   int ok = 0, count = 0, i = row, j = col;
