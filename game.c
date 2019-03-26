@@ -64,10 +64,10 @@ void Play(){
     do {
         input = getch();
         if (input == ' ' || input == 10) {
-            rowAvailable = GetAvailableRow(columnChosen);
+            rowAvailable = SlotAvailableInRow(columnChosen);
             if (rowAvailable > 0) {
                 //New/cleaned
-                for (int i = 0 ; i < GetAvailableRow(columnChosen) ; i++ ){
+                for (int i = 0 ; i < SlotAvailableInRow(columnChosen) ; i++ ){
                     boardState[i][columnChosen + 1] = turn;
                     DrawBoard();
                     napms(120);
@@ -218,7 +218,7 @@ void PreviewPiece(int row, int columnChosen, int color) {
   }
 }
 
-int GetAvailableRow(int col) {
+int SlotAvailableInRow(int col) {
   int i = 0;
   while(boardState[i + 1][col+1] == 0 && i <= 5)
     i++;
@@ -242,7 +242,7 @@ void GameOver() {
     endwin();
     exit(0);
   }
-  if(ch == 'y') {
+  else {
       int i=0, j=0;
       do{
           do{

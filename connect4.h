@@ -32,7 +32,7 @@ void DrawBoard();
 
 void Play();
 void PreviewPiece(int row, int colChosen, int color);
-int GetAvailableRow(int col);
+int SlotAvailableInRow(int col);
 int CheckEndOfGameFromPosition(int row, int col);
 void GameOver();
 

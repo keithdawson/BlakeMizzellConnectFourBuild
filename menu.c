@@ -14,6 +14,7 @@ void Initialize() {
   init_pair(4, COLOR_BLUE, COLOR_BLUE);
   init_pair(5, COLOR_WHITE, COLOR_WHITE);
   init_pair(6, COLOR_YELLOW, COLOR_YELLOW);
+  init_pair(7, COLOR_WHITE, COLOR_BLACK);
 
 }
 
@@ -66,21 +67,33 @@ void DrawMenu(int choice) {
 
 /* Select name and color for both players */
 void PlayerSelect() {
-  //char *xString, *yString;
-  int c, i;
+  char xString[60], yString[60];
+  int xBoardModified, yBoardModified;
   nodelay(stdscr, FALSE);
   clear();
   echo();
-  mvprintw(maxy / 4 - 4, maxx / 6, "Enter desired size of board in the X direction: ");
+  xBoardModified = (maxx / 6) - 1;
+  attrset(COLOR_PAIR(1));
+  mvprintw(maxy / 4 - 4, maxx / 6, "Warning: Values over ");
+  sprintf(xString, "%d will generate a board larger than your screen.", xBoardModified);
+  printw(xString);
+  attrset(COLOR_PAIR(7));
+  mvprintw(maxy / 4 - 2, maxx / 6, "Enter desired size of board in the X direction: ");
   scanw("%d", &boardXDim);
-  mvprintw(maxy / 4 - 2, maxx / 6, "Enter desired size of board in the Y direction: ");
+  yBoardModified = (maxy / 3) - 2;
+  attrset(COLOR_PAIR(1));
+  mvprintw(maxy / 4 - 4, maxx / 6, "Warning: Values over ");
+  sprintf(yString, "%d will generate a board larger than your screen.   ", yBoardModified);
+  printw(yString);
+  attrset(COLOR_PAIR(7));
+  mvprintw(maxy / 4, maxx / 6, "Enter desired size of board in the Y direction: ");
   scanw("%d", &boardYDim);
   attrset(COLOR_PAIR(1));
-  mvprintw(maxy / 4, maxx / 6, "ENTER P1 (RED) NAME: ");
+  mvprintw(maxy / 4 + 2, maxx / 6, "ENTER P1 (RED) NAME: ");
   refresh();
   getnstr(p[0].name, 10);
   attrset(COLOR_PAIR(2));
-  mvprintw(maxy / 4 + 2, maxx / 6, "ENTER P2 (BLUE) NAME: ");
+  mvprintw(maxy / 4 + 4, maxx / 6, "ENTER P2 (BLUE) NAME: ");
   getnstr(p[1].name, 10);
   clear();
   noecho();
