@@ -66,11 +66,15 @@ void DrawMenu(int choice) {
 
 /* Select name and color for both players */
 void PlayerSelect() {
-  char *msg1 = "'s Color is";
+  //char *xString, *yString;
   int c, i;
   nodelay(stdscr, FALSE);
   clear();
   echo();
+  mvprintw(maxy / 4 - 4, maxx / 6, "Enter desired size of board in the X direction: ");
+  scanw("%d", &boardXDim);
+  mvprintw(maxy / 4 - 2, maxx / 6, "Enter desired size of board in the Y direction: ");
+  scanw("%d", &boardYDim);
   attrset(COLOR_PAIR(1));
   mvprintw(maxy / 4, maxx / 6, "ENTER P1 (RED) NAME: ");
   refresh();
@@ -96,6 +100,8 @@ void Quit() {
   refresh();
   wrefresh(title);
   napms(1000);
+  endwin();
+  exit(0);
 }
 
 void DrawPrompt(char *s) {

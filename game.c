@@ -86,27 +86,10 @@ void Play(){
                     if (colsFull == boardXDim) {
                         colsFull = 0;
                         //Draw does work
-                        s = "DRAW! New game? (y) or (n)";
+                        s = "DRAW! Exiting";
                         DrawPrompt(s);
-                        while (input != 'n' && input != 'y'){
-                            input = getch();
-                            if (input == 'y'){
-                                Quit();
-                            }
-                            else if (input == 'n'){
-                                int i=0, j=0;
-                                do{
-                                    do{
-                                        boardState[j][i]=0;
-                                        i++;
-                                    }while (j < boardYDim);
-                                    j++;
-                                } while (i < boardXDim);
-                                DrawBoarder();
-                                DrawBoard();
-                                break;
-                            }
-                        }
+                        napms(1000);
+                        Quit();
                     }
                 }
             }
