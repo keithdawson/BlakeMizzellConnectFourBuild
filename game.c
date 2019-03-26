@@ -53,7 +53,6 @@ void DrawBoard(){
     wrefresh(board);
 }
 
-
 // Play not cleaned hardly at all
 
 void Play(){
@@ -86,7 +85,28 @@ void Play(){
                     colsFull++;
                     if (colsFull == boardXDim) {
                         colsFull = 0;
-                        GameIsDraw();
+                        //Draw does work
+                        s = "DRAW! New game? (y) or (n)";
+                        DrawPrompt(s);
+                        while (input != 'n' && input != 'y'){
+                            input = getch();
+                            if (input == 'y'){
+                                Quit();
+                            }
+                            else if (input == 'n'){
+                                int i=0, j=0;
+                                do{
+                                    do{
+                                        boardState[j][i]=0;
+                                        i++;
+                                    }while (j < boardYDim);
+                                    j++;
+                                } while (i < boardXDim);
+                                DrawBoarder();
+                                DrawBoard();
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -222,38 +242,14 @@ int GetAvailableRow(int col) {
   return i;
 }
 
-void ResetBoard() {
-  int i, j;
-  for(i = 0; i <= boardYDim; i++)
-    for(j = 0; j <= boardXDim; j++)
-      boardState[i][j] = 0;
-}
 
-void GameIsDraw() {
-  char *msg = "DRAW!\n PLAY AGAIN?\n YES(y) / NO(n)";
-  int ch;
-  DrawPrompt(msg);
-  do {
-    ch = getch();
-  }while(ch != 'y' && ch != 'n');
-  if(ch == 'n') {
-    Quit();
-    endwin();
-    exit(0);
-  }
-  if(ch == 'y') {
-    ResetBoard();
-    DrawBoarder();
-    DrawBoard();
-  }
-}
 /* Update variables and print message when the game is over */
 void GameOver() {
   char msg[100];
   int ch;
   colsFull = 0;
 
-  //Error Cheching help
+  //Error Checking help
   sprintf(msg, "%s WINS!\n PLAY AGAIN OR EXIT?\n YES(y)/NO(n)",
 	  p[turn - 1].name);
   DrawPrompt(msg);
@@ -264,8 +260,12 @@ void GameOver() {
     exit(0);
   }
   if(ch == 'y') {
-    ResetBoard();
-    DrawBoarder();
-    DrawBoard();
+      int i=0, j=0;
+      do{
+          do{
+              boardState[j][i]=0;
+          }while (j < boardYDim);
+      } while (i < boardXDim);
+      DrawBoard();
   }
 }

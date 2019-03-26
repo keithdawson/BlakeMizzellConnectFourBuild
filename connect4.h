@@ -33,8 +33,6 @@ void Play();
 void PreviewPiece(int row, int colChosen, int color);
 int GetAvailableRow(int col);
 int CheckEndOfGameFromPosition(int row, int col);
-void ResetBoard();
-void GameIsDraw();
 void GameOver();
 
 
