@@ -89,6 +89,11 @@ void PlayerSelect() {
   mvprintw(maxy / 4, maxx / 6, "Enter desired size of board in the Y direction: ");
   scanw("%d", &boardYDim);
   attrset(COLOR_PAIR(1));
+  //Values over 10,000 give errors when put into an array.
+  if (boardXDim > 10000) boardXDim = 10000;
+  else if (boardXDim < 0) boardXDim = 7;
+  if (boardYDim > 10000) boardYDim = 10000;
+  else if (boardYDim < 0) boardYDim = 6;
   mvprintw(maxy / 4 + 2, maxx / 6, "ENTER P1 (RED) NAME: ");
   refresh();
   getnstr(p[0].name, 10);

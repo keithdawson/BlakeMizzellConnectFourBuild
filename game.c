@@ -6,8 +6,6 @@ void DrawBoarder(){
     int x = 0, y = 0, maxXDim = boardXDim * 6 + 2, maxYDim = boardYDim * 3 + 1;
     board = newwin(maxYDim, maxXDim, 4, 2);
     wattron(board, COLOR_PAIR(6));
-
-
     for (int i = 0; i < boardXDim; i++){            //This starts in the x direction for each slot
         for (int j = 0; j < boardYDim; j++){        //This starts in the y direction for each slot
             for (int k = 0; k < 8; k++) {
@@ -56,10 +54,11 @@ void DrawBoard(){
 // Play not cleaned hardly at all
 
 void Play(){
-    int input, rowAvailable, columnChosen = 0;
+    int input, rowAvailable, columnChosen = 0, tempColumn;
     turn = 1;
     nodelay(stdscr, TRUE);
     char *s = "Use arrow keys to pick column, enter to select and 'q' to quit.";
+    char check[50];
     mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
     do {
         input = getch();
@@ -75,7 +74,11 @@ void Play(){
                     DrawBoard();
                 }
                 boardState[rowAvailable][columnChosen+1] = turn;
-                DrawBoard(boardState);
+                sprintf(check, "Piece Placed Row = , Col = ");
+                mvprintw(maxy - 2, maxx / 2, check);
+                sprintf(check, "%d", columnChosen +1);
+                printw(check);
+                DrawBoard();
                 if (!1/*CheckEndOfGameFromPosition(rowAvailable, columnChosen)*/) {
                     GameOver();
                 }
@@ -220,7 +223,7 @@ void PreviewPiece(int row, int columnChosen, int color) {
 
 int SlotAvailableInRow(int col) {
   int i = 0;
-  while(boardState[i + 1][col+1] == 0 && i <= 5)
+  while(boardState[i + 1][col+1] == 0 && i < boardYDim)
     i++;
   return i;
 }
