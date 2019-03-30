@@ -202,6 +202,47 @@ int CheckEndOfGameFromPosition(int row, int col) {
 }
 */
 
+int CheckWinCondition(int row, int column){
+
+}
+
+int CountFromPosition(int row, int column, int turn) {
+    int pieceCount = 1, revert = 0, pieceCountMax = 0;
+    //Case for piece not yet placed (for PvC case)
+    if (boardState[row][column] != turn) boardState[row][column] = turn, revert = 1;
+    //Check Column
+
+    for (int i = 1; i < 4; i++) {
+        if (boardState[row + i][column] == turn) pieceCount++;
+        if ((row - i) > 0 && boardState[row - i][column] == turn) pieceCount++;
+        else break;
+    }
+    if (pieceCount > pieceCountMax) pieceCountMax = pieceCount;
+    pieceCount = 1;
+    for (int i = 1; i < 4; i++) {
+        if (boardState[row][column + i] == turn) pieceCount++;
+        if ((column - i) > 0 && boardState[row][column - i] == turn) pieceCount++;
+        else break;
+    }
+
+    //Here DOWN SDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+    if (pieceCount > pieceCountMax) pieceCountMax = pieceCount;
+    pieceCount = 1;
+    //Verify with math
+    for (int i = 0; i < 4; i++) {
+        if (boardState[row - i][column + i] == turn) pieceCount++;
+        else break;
+    }
+    if (pieceCount > pieceCountMax) pieceCountMax = pieceCount;
+    pieceCount = 1;
+    for (int i = 0; i < 4; i++) {
+        if (row + i == 0 || column - i == 0) pieceCount = pieceCount;
+        else if (boardState[row + i][column - i] == turn) pieceCount++;
+        else if (boardState[row - i][column + i] == turn) pieceCount++;
+
+        else break;
+    }
+}
 
 void PreviewPiece(int row, int columnChosen, int color) {
   int i;
@@ -222,8 +263,7 @@ void PreviewPiece(int row, int columnChosen, int color) {
 
 int SlotAvailableInRow(int col) {
   int i = 0;
-  while(boardState[i + 1][col] == 0 && i < boardYDim)
-    i++;
+  while(boardState[i + 1][col] == 0 && i < boardYDim) i++;
   return i;
 }
 
