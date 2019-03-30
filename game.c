@@ -54,7 +54,7 @@ void DrawBoard(){
 // Play not cleaned hardly at all
 
 void Play(){
-    int input, rowAvailable, columnChosen = 1, tempColumn;
+    int input, rowAvailable, columnChosen = 1;
     turn = 1;
     nodelay(stdscr, TRUE);
     char *s = "Use arrow keys to pick column, enter to select and 'q' to quit.";
@@ -66,7 +66,7 @@ void Play(){
             rowAvailable = SlotAvailableInRow(columnChosen);
             if (rowAvailable > 0) {
                 //New/cleaned
-                for (int i = 0 ; i < SlotAvailableInRow(columnChosen) ; i++ ){
+                for (int i = 0 ; i < rowAvailable ; i++ ){
                     boardState[i][columnChosen] = turn;
                     DrawBoard();
                     napms(120);
@@ -74,7 +74,7 @@ void Play(){
                     DrawBoard();
                 }
                 boardState[rowAvailable][columnChosen] = turn;
-                sprintf(check, "Piece Placed Row = %d, Col = %d", rowAvailable, columnChosen);
+                sprintf(check, "Piece Placed Row = %d, Col = %d      ", rowAvailable, columnChosen);
                 mvprintw(maxy - 2, maxx / 2, check);
                 DrawBoard();
                 if (!1/*CheckEndOfGameFromPosition(rowAvailable, columnChosen)*/) {
@@ -97,12 +97,13 @@ void Play(){
         }
         PreviewPiece(2, columnChosen, turn + 2);
         if (input == KEY_LEFT) {
-            columnChosen = (columnChosen - 1) % boardXDim;
-            if (columnChosen <= 0) columnChosen = boardXDim - 1;
+            columnChosen = (columnChosen - 1) % (boardXDim + 1);
+            if (columnChosen <= 0) columnChosen = boardXDim;
             PreviewPiece(2, columnChosen, turn + 2);
         }
         if (input == KEY_RIGHT) {
-            columnChosen = (columnChosen + 1) % boardXDim;
+            columnChosen = (columnChosen + 1) % (boardXDim + 1);
+            if (columnChosen == 0) columnChosen = 1;
             PreviewPiece(2, columnChosen, turn + 2);
         }
     }
@@ -204,7 +205,7 @@ int CheckEndOfGameFromPosition(int row, int col) {
 
 void PreviewPiece(int row, int columnChosen, int color) {
   int i;
-  for(i = 1; i <= boardXDim; i++) {
+  for(i = 0; i <= boardXDim; i++) {
     if(i == columnChosen-1) {
       attron(COLOR_PAIR(color));
       mvprintw(row, 4 + 6 * i, "****");
