@@ -54,11 +54,11 @@ void DrawBoard(){
 // Play not cleaned hardly at all
 
 void Play(){
-    int input, rowAvailable, columnChosen = 1;
+    int input, rowAvailable, columnChosen = 1, temp;
     turn = 1;
     nodelay(stdscr, TRUE);
     char *s = "Use arrow keys to pick column, enter to select and 'q' to quit.";
-    char check[50];
+    char check[100];
     mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
     do {
         input = getch();
@@ -74,9 +74,12 @@ void Play(){
                     DrawBoard();
                 }
                 boardState[rowAvailable][columnChosen] = turn;
-                sprintf(check, "Piece Placed Row = %d, Col = %d      ", rowAvailable, columnChosen);
+                sprintf(check, "Piece Placed Row = %d, Col = %d, Turn (in place)=%d        ", rowAvailable, columnChosen, boardState[rowAvailable][columnChosen]);
                 mvprintw(maxy - 2, maxx / 2, check);
                 DrawBoard();
+                temp = CountFromPosition(rowAvailable, columnChosen, turn);
+                //sprintf(check, "Pieces in a row = %d         ", temp);
+                //mvprintw(maxy - 3, maxx / 2, check);
                 if (!1/*CheckEndOfGameFromPosition(rowAvailable, columnChosen)*/) {
                     GameOver();
                 }
@@ -202,46 +205,56 @@ int CheckEndOfGameFromPosition(int row, int col) {
 }
 */
 
-int CheckWinCondition(int row, int column){
-
-}
-
 int CountFromPosition(int row, int column, int turn) {
-    int pieceCount = 1, revert = 0, pieceCountMax = 0;
+    int pieceCount = 1, pieceCountMax = 0;
+    char check0[100], check1[100], check2[100], check3[100];
     //Case for piece not yet placed (for PvC case)
-    if (boardState[row][column] != turn) boardState[row][column] = turn, revert = 1;
     //Check Column
 
     for (int i = 1; i < 4; i++) {
         if (boardState[row + i][column] == turn) pieceCount++;
         if ((row - i) > 0 && boardState[row - i][column] == turn) pieceCount++;
         else break;
+        sprintf(check0, "Column i=%d Pieces in a row = %d         ",i, pieceCount);
+        mvprintw(maxy - 3, maxx - 40, check0);
+        napms(2000);
     }
     if (pieceCount > pieceCountMax) pieceCountMax = pieceCount;
     pieceCount = 1;
+    //Check row
     for (int i = 1; i < 4; i++) {
         if (boardState[row][column + i] == turn) pieceCount++;
         if ((column - i) > 0 && boardState[row][column - i] == turn) pieceCount++;
         else break;
+        sprintf(check1, "Row i=%d Pieces in a row = %d         ",i, pieceCount);
+        mvprintw(maxy - 3, maxx - 40, check1);
+        napms(2000);
     }
 
-    //Here DOWN SDSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
     if (pieceCount > pieceCountMax) pieceCountMax = pieceCount;
     pieceCount = 1;
-    //Verify with math
-    for (int i = 0; i < 4; i++) {
-        if (boardState[row - i][column + i] == turn) pieceCount++;
+    //Check positive slope
+    for (int i = 1; i < 4; i++) {
+        if ((row - i) > 0 && (column - i) > 0 && boardState[row - i][column - i] == turn) pieceCount++;
+        if (boardState[row + i][column + i] == turn) pieceCount++;
         else break;
+        sprintf(check2, "pos Slope i=%d Pieces in a row = %d         ",i, pieceCount);
+        mvprintw(maxy - 3, maxx - 40, check2);
+        napms(2000);
     }
     if (pieceCount > pieceCountMax) pieceCountMax = pieceCount;
     pieceCount = 1;
-    for (int i = 0; i < 4; i++) {
-        if (row + i == 0 || column - i == 0) pieceCount = pieceCount;
-        else if (boardState[row + i][column - i] == turn) pieceCount++;
-        else if (boardState[row - i][column + i] == turn) pieceCount++;
-
+    //Check negative slope
+    for (int i = 1; i < 4; i++) {
+        if (column - i > 0 && boardState[row + i][column - i] == turn) pieceCount++;
+        if (row - i > 0 && boardState[row - i][column + i] == turn) pieceCount++;
         else break;
+        sprintf(check3, "neg slope i=%d Pieces in a row = %d         ",i, pieceCount);
+        mvprintw(maxy - 3, maxx - 20, check3);
+        napms(2000);
     }
+    if (pieceCount > pieceCountMax) pieceCountMax = pieceCount;
+    return pieceCountMax;
 }
 
 void PreviewPiece(int row, int columnChosen, int color) {
