@@ -2,7 +2,7 @@
 
 Player p[2];
 WINDOW *board, *prompt, *title, *boardWindow;
-int maxx, maxy, boardState[10000][10000], winningPositions[2][7], turn, colsFull = 0, boardXDim=-1, boardYDim=-1;
+int maxx, maxy, boardState[10000][10000], turn, colsFull = 0, boardXDim=-1, boardYDim=-1;
 char menuList[3][20] = {"PvP", "PvC", "EXIT"};
 
 
