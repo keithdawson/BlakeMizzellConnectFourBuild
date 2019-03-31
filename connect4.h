@@ -26,19 +26,15 @@ void PlayerSelect();
 void PlayerSelectVsComputer();
 void DrawPrompt(char *s);
 
- //Gameplay functions
+//Gameplay functions
 
 void DrawBoarder();
 void DrawBoard();
-
 void PlayVsP();
 void PlayVsC();
 void PreviewPiece(int row, int colChosen, int color);
 int SlotAvailableInRow(int col);
 int CountFromPosition(int row, int column, int turn);
-void GameOver();
-
-
 
 void Quit();
 

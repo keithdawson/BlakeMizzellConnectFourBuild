@@ -65,7 +65,7 @@ void DrawMenu(int choice) {
   }
 }
 
-/* Select name and color for both players */
+// Select board size and name for both players
 void PlayerSelect() {
   char xString[60], yString[60];
   int xBoardModified, yBoardModified;
@@ -104,6 +104,7 @@ void PlayerSelect() {
   noecho();
 }
 
+//Select Board size and initialize player name
 void PlayerSelectVsComputer() {
     char xString[60], yString[60];
     int xBoardModified, yBoardModified;
@@ -158,10 +159,9 @@ void Quit() {
 }
 
 void DrawPrompt(char *s) {
-  prompt = newwin(5, 40, 5, 5);
-  mvwprintw(prompt, 1, 1, "%s", s); 
+  prompt = newwin(6, 41, 5, 5);
+  mvwprintw(prompt, 2, 1, "%s", s);
   refresh();
   touchwin(prompt);
   wrefresh(prompt);
-  getch();
 }
