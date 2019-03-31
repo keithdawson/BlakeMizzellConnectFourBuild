@@ -76,7 +76,7 @@ void PlayVsP(){
                 DrawBoard();
 
                 if (CountFromPosition(rowAvailable, columnChosen, turn) >= 4) {
-                    GameOver();
+                    GameOver(0);
                 }
                 if (turn == 1) turn = 2;
                 else turn = 1;
@@ -134,7 +134,7 @@ void PlayVsC(){
                     DrawBoard();
 
                     if (CountFromPosition(rowAvailable, columnChosen, turn) >= 4) {
-                        GameOver();
+                        GameOver(1);
                     }
                     if (turn == 1) turn = 2;
                     else turn = 1;
@@ -172,7 +172,7 @@ void PlayVsC(){
             //Make sure player isn't about to win
             for (int i = 1; i < boardXDim; i++){
                 rowAvailable=SlotAvailableInRow(i);
-                if (CountFromPosition(rowAvailable, i, turn - 1) == 4) bestColumn = i, bestMove = 3;
+                if (CountFromPosition(rowAvailable, i, turn - 1) == 4) bestColumn = i, bestMove = CountFromPosition(rowAvailable, i, turn -1);
             }
             for (int i = 1; i < boardXDim; i++){
                 rowAvailable=SlotAvailableInRow(i);
@@ -180,13 +180,16 @@ void PlayVsC(){
             }
             PreviewPiece(2, bestColumn, turn + 2);
             napms(500);
+            rowAvailable=SlotAvailableInRow(bestColumn);
             for (int i = 0; i < rowAvailable; i++) {
+
                 boardState[i][bestColumn] = turn;
                 DrawBoard();
                 napms(120);
                 boardState[i][bestColumn] = 0;
                 DrawBoard();
             }
+
             boardState[rowAvailable][bestColumn] = turn;
             DrawBoard();
             turn = 1;
@@ -282,7 +285,7 @@ int SlotAvailableInRow(int col) {
 
 
 /* Update variables and print message when the game is over */
-void GameOver() {
+void GameOver(int computer) {
   char msg[100];
   int ch;
   colsFull = 0;

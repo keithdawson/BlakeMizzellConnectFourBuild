@@ -131,7 +131,7 @@ void PlayerSelectVsComputer() {
     else if (boardXDim < 0) boardXDim = 7;
     if (boardYDim > 10000) boardYDim = 10000;
     else if (boardYDim < 0) boardYDim = 6;
-    mvprintw(maxy / 4 + 2, maxx / 6, "ENTER Players (RED) NAME: ");
+    mvprintw(maxy / 4 + 2, maxx / 6, "ENTER Player's (RED) NAME: ");
     refresh();
     getnstr(p[0].name, 10);
     sprintf(p[1].name, "Computer");

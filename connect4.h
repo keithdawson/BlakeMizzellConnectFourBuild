@@ -35,7 +35,7 @@ void PlayVsC();
 void PreviewPiece(int row, int colChosen, int color);
 int SlotAvailableInRow(int col);
 int CountFromPosition(int row, int column, int turn);
-void GameOver();
+void GameOver(int computer);
 
 
 
