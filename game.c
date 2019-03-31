@@ -29,10 +29,10 @@ void DrawBoarder(){
 //Draw Board Cleaned
 
 void DrawBoard(){
-    int i = 1, j = 1, x, y;
-    while (i <= boardXDim){
+    int x, y;
+    for(int i = 1; i <= boardXDim; i++) {
         x = 2 + 6 * (i - 1);
-        while (j <= boardYDim){
+        for(int j = 1; j <= boardYDim; j++) {
             y = 1 + 3 * (j - 1);
             if(boardState[j][i] == 0){
                 wattrset(board, COLOR_PAIR(1));
@@ -40,15 +40,13 @@ void DrawBoard(){
                 mvwaddstr(board, y + 1, x, "    ");
             }
             else{
-                if (boardState[j][i] == 2) wattrset(board, COLOR_PAIR(4));
-                else if (boardState[j][i] == 1) wattrset(board, COLOR_PAIR(3));
+                if (boardState[j][i] == 1) wattrset(board, COLOR_PAIR(3));
+                else if (boardState[j][i] == 2) wattrset(board, COLOR_PAIR(4));
                 mvwaddstr(board, y, x, "####");
                 mvwaddstr(board, y + 1, x, "####");
                 wattrset(board, A_NORMAL);
             }
-            j++;
         }
-        i++;
     }
     refresh();
     wrefresh(board);
