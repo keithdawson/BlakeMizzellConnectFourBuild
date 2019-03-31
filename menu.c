@@ -102,7 +102,41 @@ void PlayerSelect() {
   getnstr(p[1].name, 10);
   clear();
   noecho();
-
+}
+void PlayerSelectVsComputer() {
+    char xString[60], yString[60];
+    int xBoardModified, yBoardModified;
+    nodelay(stdscr, FALSE);
+    clear();
+    echo();
+    xBoardModified = (maxx / 6) - 1;
+    attrset(COLOR_PAIR(1));
+    mvprintw(maxy / 4 - 4, maxx / 6, "Warning: Values over ");
+    sprintf(xString, "%d will generate a board larger than your screen.", xBoardModified);
+    printw(xString);
+    attrset(COLOR_PAIR(7));
+    mvprintw(maxy / 4 - 2, maxx / 6, "Enter desired size of board in the X direction: ");
+    scanw("%d", &boardXDim);
+    yBoardModified = (maxy / 3) - 2;
+    attrset(COLOR_PAIR(1));
+    mvprintw(maxy / 4 - 4, maxx / 6, "Warning: Values over ");
+    sprintf(yString, "%d will generate a board larger than your screen.   ", yBoardModified);
+    printw(yString);
+    attrset(COLOR_PAIR(7));
+    mvprintw(maxy / 4, maxx / 6, "Enter desired size of board in the Y direction: ");
+    scanw("%d", &boardYDim);
+    attrset(COLOR_PAIR(1));
+    //Values over 10,000 give errors when put into an array.
+    if (boardXDim > 10000) boardXDim = 10000;
+    else if (boardXDim < 0) boardXDim = 7;
+    if (boardYDim > 10000) boardYDim = 10000;
+    else if (boardYDim < 0) boardYDim = 6;
+    mvprintw(maxy / 4 + 2, maxx / 6, "ENTER Players (RED) NAME: ");
+    refresh();
+    getnstr(p[0].name, 10);
+    sprintf(p[1].name, "Computer");
+    clear();
+    noecho();
 }
   
 void Quit() {

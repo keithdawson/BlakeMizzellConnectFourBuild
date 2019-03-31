@@ -7,13 +7,12 @@
 
 typedef struct {
   char name[30];
-  int score;
 }Player;
 
 // External Variables
 extern Player p[2];
-extern char menuList[3][20], players[2][30];
-int maxx, maxy, boardState[10000][10000], winningPositions[2][7], turn, colsFull, boardXDim, boardYDim;
+extern char menuList[3][20];
+int maxx, maxy, boardState[10000][10000], turn, colsFull, boardXDim, boardYDim;
 extern WINDOW *board, *prompt, *title;
 
 
@@ -23,6 +22,7 @@ void Initialize();
 int InitializeMenu();
 void DrawMenu(int choice);
 void PlayerSelect();
+void PlayerSelectVsComputer();
 void DrawPrompt(char *s);
 
  //Gameplay functions
@@ -30,7 +30,8 @@ void DrawPrompt(char *s);
 void DrawBoarder();
 void DrawBoard();
 
-void Play();
+void PlayVsP();
+void PlayVsC();
 void PreviewPiece(int row, int colChosen, int color);
 int SlotAvailableInRow(int col);
 int CountFromPosition(int row, int column, int turn);

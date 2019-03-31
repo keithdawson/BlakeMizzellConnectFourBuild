@@ -15,10 +15,12 @@ int main() {
   case 0: //Player vs Player
     PlayerSelect();
     DrawBoarder();
-    Play();
+    PlayVsP();
     break;
   case 1: //Player Vs Computer
-
+    PlayerSelectVsComputer();
+    DrawBoarder();
+    PlayVsC();
     break;
   case 2: /* Quit */
     Quit();

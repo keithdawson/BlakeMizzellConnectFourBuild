@@ -53,12 +53,11 @@ void DrawBoard(){
 
 // Play not cleaned hardly at all
 
-void Play(){
-    int input, rowAvailable, columnChosen = 1, temp;
+void PlayVsP(){
+    int input, rowAvailable, columnChosen = 1;
     turn = 1;
     nodelay(stdscr, TRUE);
     char *s = "Use arrow keys to pick column, enter to select and 'q' to quit.";
-    char check[100];
     mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
     do {
         input = getch();
@@ -69,17 +68,13 @@ void Play(){
                 for (int i = 0 ; i < rowAvailable ; i++ ){
                     boardState[i][columnChosen] = turn;
                     DrawBoard();
-                    napms(120);
+                    napms(125);
                     boardState[i][columnChosen] = 0;
                     DrawBoard();
                 }
                 boardState[rowAvailable][columnChosen] = turn;
-                //sprintf(check, "Piece Placed Row = %d, Col = %d, Turn (in place)=%d        ", rowAvailable, columnChosen, boardState[rowAvailable][columnChosen]);
-                //mvprintw(maxy - 2, maxx / 2, check);
                 DrawBoard();
-                //temp = CountFromPosition(rowAvailable, columnChosen, turn);
-                //sprintf(check, "Pieces in a row = %d         ", temp);
-                //mvprintw(maxy - 3, maxx / 2, check);
+
                 if (CountFromPosition(rowAvailable, columnChosen, turn) >= 4) {
                     GameOver();
                 }
@@ -114,96 +109,93 @@ void Play(){
     Quit();
 }
 
-//Check End Of game (totally rewrite)
-/*
-int CheckEndOfGameFromPosition(int row, int col) {
-    col = col+1;
-    int ok = 0, count = 0, i = row, j = col+1;
-  InitializeWinningPositions();
+void PlayVsC(){
+    int input = 0, rowAvailable, columnChosen = 1;
+    turn = 1;
 
- //check vertical
+    nodelay(stdscr, TRUE);
+    char *s = "Use arrow keys to pick column, enter to select and 'q' to quit. You go first";
+    mvprintw(maxy - 1, (maxx - strlen(s)) / 2, s);
+    do {
+        if (turn == 1){
+            input = getch();
+            if (input == ' ' || input == 10) {
+                rowAvailable = SlotAvailableInRow(columnChosen);
+                if (rowAvailable > 0) {
+                    //New/cleaned
+                    for (int i = 0; i < rowAvailable; i++) {
+                        boardState[i][columnChosen] = turn;
+                        DrawBoard();
+                        napms(125);
+                        boardState[i][columnChosen] = 0;
+                        DrawBoard();
+                    }
+                    boardState[rowAvailable][columnChosen] = turn;
+                    DrawBoard();
 
-  while(boardState[i][j] == boardState[col][row] && i <= 6) {
-    count++;
-    winningPositions[0][count - 1] = i;
-    winningPositions[1][count - 1] = j;
-    i++;
-  }
-  if(count >= 4) {
-    return 1;
-  }
+                    if (CountFromPosition(rowAvailable, columnChosen, turn) >= 4) {
+                        GameOver();
+                    }
+                    if (turn == 1) turn = 2;
+                    else turn = 1;
+                    if (rowAvailable == 1) {
+                        colsFull++;
+                        if (colsFull == boardXDim) {
+                            colsFull = 0;
+                            //Draw does work
+                            s = "DRAW! Exiting";
+                            DrawPrompt(s);
+                            napms(1000);
+                            Quit();
+                        }
+                    }
+                }
+            }
+            PreviewPiece(2, columnChosen, turn + 2);
+            if (input == KEY_LEFT) {
+                columnChosen = (columnChosen - 1) % (boardXDim + 1);
+                if (columnChosen <= 0) columnChosen = boardXDim;
+                PreviewPiece(2, columnChosen, turn + 2);
+            }
+            if (input == KEY_RIGHT) {
+                columnChosen = (columnChosen + 1) % (boardXDim + 1);
+                if (columnChosen == 0) columnChosen = 1;
+                PreviewPiece(2, columnChosen, turn + 2);
+            }
+        }
+        else {
+            napms(500);
+            //Figure out best place to play
+            //Add time modded bestCol to randomize base placement
+            int bestColumn = 1, bestMove = 1;
 
- //check horizontal
-
-  count = 0; i = row; j = col;
-  InitializeWinningPositions();
-  while(boardState[i][j] == boardState[col][row] && j >= 1) {
-    count++;
-    winningPositions[0][count - 1] = i;
-    winningPositions[1][count - 1] = j;
-    j--;
-  }
-  j = col + 1;
-  while(boardState[i][j] == boardState[col][row] && j <= 7) {
-    count++;
-    winningPositions[0][count - 1] = i;
-    winningPositions[1][count - 1] = j;
-    j++;
-  }
-  if(count >= 4) {
-    return 1;
-  }
-
-// check first diagonal
-
-  count = 0; i = row; j = col;
-  InitializeWinningPositions();
-  while(boardState[i][j] == boardState[col][row] && j <=7 && i >= 1) {
-    count++;
-    winningPositions[0][count - 1] = i;
-    winningPositions[1][count - 1] = j;
-    j++;
-    i--;
-  }
-  i = row + 1;
-  j = col - 1;
-  while(boardState[i][j] == boardState[col][row] && j >=1 && i <= 6) {
-    count++;
-    winningPositions[0][count - 1] = i;
-    winningPositions[1][count - 1] = j;
-    j--;
-    i++;
-  }
-  if(count >= 4) {
-    return 1;
-  }
-
-// check second diagonal
-
-  count = 0; i = row; j = col;
-  InitializeWinningPositions();
-  while(boardState[i][j] == boardState[col][row] && j >=1 && i >= 1) {
-    count++;
-    winningPositions[0][count - 1] = i;
-    winningPositions[1][count - 1] = j;
-    j--;
-    i--;
-  }
-  i = row + 1;
-  j = col + 1;
-  while(boardState[i][j] == boardState[col][row] && j <= 7 && i <= 6) {
-    count++;
-    winningPositions[0][count - 1] = i;
-    winningPositions[1][count - 1] = j;
-    j++;
-    i++;
-  }
-  if(count >= 4) {
-    return 1;
-  }
-  return 0;
+            //Make sure player isn't about to win
+            for (int i = 1; i < boardXDim; i++){
+                rowAvailable=SlotAvailableInRow(i);
+                if (CountFromPosition(rowAvailable, i, turn - 1) == 4) bestColumn = i, bestMove = 3;
+            }
+            for (int i = 1; i < boardXDim; i++){
+                rowAvailable=SlotAvailableInRow(i);
+                if (bestMove < CountFromPosition(rowAvailable, i, turn)) bestColumn = i, bestMove = CountFromPosition(rowAvailable, i, turn);
+            }
+            PreviewPiece(2, bestColumn, turn + 2);
+            napms(500);
+            for (int i = 0; i < rowAvailable; i++) {
+                boardState[i][bestColumn] = turn;
+                DrawBoard();
+                napms(120);
+                boardState[i][bestColumn] = 0;
+                DrawBoard();
+            }
+            boardState[rowAvailable][bestColumn] = turn;
+            DrawBoard();
+            turn = 1;
+        }
+    }
+    while (input != 'q');
+    Quit();
 }
-*/
+
 
 int CountFromPosition(int row, int column, int turn) {
     int pieceCount = 1, pieceCountMax = 0;
