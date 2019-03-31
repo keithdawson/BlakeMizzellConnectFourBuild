@@ -76,7 +76,8 @@ void PlayVsP(){
                 DrawBoard();
 
                 if (CountFromPosition(rowAvailable, columnChosen, turn) >= 4) {
-                    GameOver(0);
+                    GameOver();
+                    Quit();
                 }
                 if (turn == 1) turn = 2;
                 else turn = 1;
@@ -134,7 +135,8 @@ void PlayVsC(){
                     DrawBoard();
 
                     if (CountFromPosition(rowAvailable, columnChosen, turn) >= 4) {
-                        GameOver(1);
+                        GameOver();
+                        Quit();
                     }
                     if (turn == 1) turn = 2;
                     else turn = 1;
@@ -172,7 +174,7 @@ void PlayVsC(){
             //Make sure player isn't about to win
             for (int i = 1; i < boardXDim; i++){
                 rowAvailable=SlotAvailableInRow(i);
-                if (CountFromPosition(rowAvailable, i, turn - 1) == 4) bestColumn = i, bestMove = CountFromPosition(rowAvailable, i, turn -1);
+                if (bestMove < CountFromPosition(rowAvailable, i, turn - 1)) bestColumn = i, bestMove = CountFromPosition(rowAvailable, i, turn -1);
             }
             for (int i = 1; i < boardXDim; i++){
                 rowAvailable=SlotAvailableInRow(i);
@@ -192,6 +194,10 @@ void PlayVsC(){
 
             boardState[rowAvailable][bestColumn] = turn;
             DrawBoard();
+            if (CountFromPosition(rowAvailable, bestColumn, turn) >= 4) {
+                GameOver();
+                Quit();
+            }
             turn = 1;
         }
     }
@@ -285,28 +291,12 @@ int SlotAvailableInRow(int col) {
 
 
 /* Update variables and print message when the game is over */
-void GameOver(int computer) {
+void GameOver() {
   char msg[100];
-  int ch;
   colsFull = 0;
-
-    attron(COLOR_PAIR(turn));
-    sprintf(msg, "%s WINS!\n PLAY AGAIN OR EXIT?\n YES(y)/NO(n)",
-	  p[turn - 1].name);
+  attron(COLOR_PAIR(turn));
+  sprintf(msg, "%s WINS!", p[turn - 1].name);
   DrawPrompt(msg);
-  while((ch = getch()) != 'y' && ch != 'n');
-  if(ch == 'n') {
-    Quit();
-    endwin();
-    exit(0);
-  }
-  else {
-      int i=0, j=0;
-      do{
-          do{
-              boardState[j][i]=0;
-          }while (j < boardYDim+100);
-      } while (i < boardXDim+100);
-      DrawBoard();
-  }
+  napms(1900);
 }
+
