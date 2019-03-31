@@ -27,6 +27,7 @@ void DrawBoarder(){
 };
 
 //Draw Board Cleaned
+
 void DrawBoard(){
     int i, j, x, y;
     for(i = 1; i <= boardXDim; i++) {

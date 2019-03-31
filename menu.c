@@ -103,6 +103,7 @@ void PlayerSelect() {
   clear();
   noecho();
 }
+
 void PlayerSelectVsComputer() {
     char xString[60], yString[60];
     int xBoardModified, yBoardModified;

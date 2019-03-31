@@ -28,6 +28,7 @@ int main() {
   default:
     break;
   }
+
   endwin();
   return 0;
 }

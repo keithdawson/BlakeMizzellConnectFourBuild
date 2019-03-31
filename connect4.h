@@ -10,6 +10,7 @@ typedef struct {
 }Player;
 
 // External Variables
+
 extern Player p[2];
 extern char menuList[3][20];
 int maxx, maxy, boardState[10000][10000], turn, colsFull, boardXDim, boardYDim;
